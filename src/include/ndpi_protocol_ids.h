@@ -285,9 +285,10 @@
 #define NDPI_PROTOCOL_WHATSAPP_FILES        242 /* Videos, pictures, voice messages... */
 #define NDPI_PROTOCOL_VIDTO                 243 /* VidTO streaming service */
 #define NDPI_PROTOCOL_RAPIDVIDEO            244 /* RapidVideo streaming */
+#define NDPI_PROTOCOL_CEPH                  245 /* Traffic of ceph monitor */
 
 /* UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE */
-#define NDPI_LAST_IMPLEMENTED_PROTOCOL              NDPI_PROTOCOL_RAPIDVIDEO
+#define NDPI_LAST_IMPLEMENTED_PROTOCOL              NDPI_PROTOCOL_CEPH
 
 #define NDPI_MAX_SUPPORTED_PROTOCOLS                (NDPI_LAST_IMPLEMENTED_PROTOCOL + 1)
 #define NDPI_MAX_NUM_CUSTOM_PROTOCOLS               (NDPI_NUM_BITS-NDPI_LAST_IMPLEMENTED_PROTOCOL)

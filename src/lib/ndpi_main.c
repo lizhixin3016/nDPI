@@ -1867,6 +1867,11 @@ static void ndpi_init_protocol_defaults(struct ndpi_detection_module_struct *ndp
           no_master, "AJP", NDPI_PROTOCOL_CATEGORY_WEB,
           ndpi_build_default_ports(ports_a, 8009, 0, 0, 0, 0) /* TCP */,
           ndpi_build_default_ports(ports_b, 0, 0, 0, 0, 0) /* UDP */);
+    ndpi_set_proto_defaults(ndpi_mod, NDPI_PROTOCOL_ACCEPTABLE, NDPI_PROTOCOL_CEPH,
+			    no_master,
+			    no_master, "CEPH", NDPI_PROTOCOL_CATEGORY_CLOUD,
+			    ndpi_build_default_ports(ports_a, 6789, 0, 0, 0, 0) /* TCP */,
+			    ndpi_build_default_ports(ports_b, 0, 0, 0, 0, 0) /* UDP */);
 
     /* calling function for host and content matched protocols */
     init_string_based_protocols(ndpi_mod);
@@ -3113,6 +3118,9 @@ void ndpi_set_protocol_detection_bitmask2(struct ndpi_detection_module_struct *n
 
   /* AJP */
   init_ajp_dissector(ndpi_struct, &a, detection_bitmask);
+
+  /* CEPH */
+  init_ceph_dissector(ndpi_struct, &a, detection_bitmask);
 
   /* ----------------------------------------------------------------- */
 
