@@ -602,13 +602,17 @@ struct ndpi_flow_tcp_struct {
 #ifdef NDPI_PROTOCOL_PPSTREAM
   u_int32_t ppstream_stage:3;
 #endif
+  u_int64_t packet_num_of_flow;  // Packet number of the flow
 #ifdef NDPI_PROTOCOL_CEPH
   u_int8_t  prev_ceph_tag;       // Message tag
   u_int64_t prev_ceph_seq;       // Sequence number.
   u_int64_t prev_ceph_tid;       // Transaction ID.
-  u_int64_t packet_num_of_flow;  // Flag for the first packet of the flow
   u_int64_t prev_ceph_ka_time;   // Timestamp of ceph keepalive report
 #endif
+#ifdef NDPI_PROTOCOL_MONGODB
+#endif
+  u_int32_t prev_mongo_reqid;     // Request id of mongo message header
+  u_int32_t prev_mongo_opcode;    // Operation code id of mongo message header
 }
 #ifndef WIN32
   __attribute__ ((__packed__))

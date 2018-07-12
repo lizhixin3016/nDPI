@@ -276,7 +276,7 @@
 #define NDPI_PROTOCOL_LINKEDIN              233 /* Paulo Angelo <pa@pauloangelo.com> */
 #define NDPI_PROTOCOL_SOUNDCLOUD            234
 #define NDPI_PROTOCOL_CSGO                  235 /* Counter-Strike Global Offensive, Dota 2 */
-#define NDPI_PROTOCOL_LISP	            236
+#define NDPI_PROTOCOL_LISP                  236
 #define NDPI_PROTOCOL_DIAMETER	            237
 #define NDPI_PROTOCOL_APPLE_PUSH            238
 #define NDPI_PROTOCOL_GOOGLE_SERVICES       239
@@ -286,9 +286,10 @@
 #define NDPI_PROTOCOL_VIDTO                 243 /* VidTO streaming service */
 #define NDPI_PROTOCOL_RAPIDVIDEO            244 /* RapidVideo streaming */
 #define NDPI_PROTOCOL_CEPH                  245 /* Traffic of ceph monitor */
+#define NDPI_PROTOCOL_MONGODB               246 /* Traffic of mongodb monitor */
 
 /* UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE */
-#define NDPI_LAST_IMPLEMENTED_PROTOCOL              NDPI_PROTOCOL_CEPH
+#define NDPI_LAST_IMPLEMENTED_PROTOCOL              NDPI_PROTOCOL_MONGODB
 
 #define NDPI_MAX_SUPPORTED_PROTOCOLS                (NDPI_LAST_IMPLEMENTED_PROTOCOL + 1)
 #define NDPI_MAX_NUM_CUSTOM_PROTOCOLS               (NDPI_NUM_BITS-NDPI_LAST_IMPLEMENTED_PROTOCOL)
