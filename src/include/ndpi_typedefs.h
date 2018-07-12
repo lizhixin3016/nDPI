@@ -606,7 +606,8 @@ struct ndpi_flow_tcp_struct {
   u_int8_t  prev_ceph_tag;       // Message tag
   u_int64_t prev_ceph_seq;       // Sequence number.
   u_int64_t prev_ceph_tid;       // Transaction ID.
-  u_int64_t packet_num_of_flow;  //flag for the first packet of the flow
+  u_int64_t packet_num_of_flow;  // Flag for the first packet of the flow
+  u_int64_t prev_ceph_ka_time;   // Timestamp of ceph keepalive report
 #endif
 }
 #ifndef WIN32

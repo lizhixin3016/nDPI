@@ -55,9 +55,7 @@ struct ceph_msg_header {
   u_int32_t data_len;   // The size of the data section.
   u_int16_t data_off;   // The way data should be aligned by the reciever.
 
-  //struct ceph_entity_name src; // Information about the sender.
-  u_int8_t    src_type; // CEPH_ENTITY_TYPE_*
-  u_int64_t   src_num;
+  struct ceph_entity_name src; // Information about the sender.
 
   u_int16_t compat_version; // Oldest compatible encoding version.
   u_int16_t reserved;       // Unused.
@@ -95,6 +93,7 @@ static void ndpi_add_ceph_flow(
   ndpi_set_detected_protocol(ndpi_struct, flow, NDPI_PROTOCOL_CEPH, NDPI_PROTOCOL_UNKNOWN);
 }
 
+
 void ndpi_search_ceph(struct ndpi_detection_module_struct* ndpi_struct, struct ndpi_flow_struct* flow) {
   struct ndpi_packet_struct* packet = &flow->packet;
 
@@ -104,10 +103,11 @@ void ndpi_search_ceph(struct ndpi_detection_module_struct* ndpi_struct, struct n
       flow->l4.tcp.packet_num_of_flow++;
       // tag_offset is used to ignore possible multipul message ACK
       u_int32_t tag_offset = 0;
-      u_int8_t tag = (u_int8_t *)packet->payload[0];
+      u_int8_t tag = (u_int8_t)packet->payload[0];
       if(flow->l4.tcp.packet_num_of_flow <= 2){
         // if is a ceph banner message
-        if(memcmp(packet->payload, CEPH_BANNER, 9) == 0){
+        u_int8_t banner_size = strlen(CEPH_BANNER);
+        if(packet->payload_packet_len == banner_size && memcmp(packet->payload, CEPH_BANNER, banner_size) == 0){
           NDPI_LOG_INFO(ndpi_struct, "found ceph traffic over tcp\n");
           ndpi_add_ceph_flow(ndpi_struct, flow);
         }
@@ -124,7 +124,7 @@ void ndpi_search_ceph(struct ndpi_detection_module_struct* ndpi_struct, struct n
           }
           tag_offset += sizeof(struct ceph_msgr_ack);
         }
-        tag = (u_int8_t *)packet->payload[tag_offset];
+        tag = (u_int8_t)packet->payload[tag_offset];
       }
 
       // analysis ceph message
@@ -137,11 +137,24 @@ void ndpi_search_ceph(struct ndpi_detection_module_struct* ndpi_struct, struct n
         //u_int32_t temp = ;
         u_int32_t length = sizeof(struct ceph_msgr_msg) + h.front_len + \
             h.middle_len + h.data_len + sizeof(struct ceph_msg_footer);
-        if((length + tag_offset )== packet->payload_packet_len){
-          NDPI_LOG_INFO(ndpi_struct, "found ceph traffic over tcp\n");
+        if((length + tag_offset) == packet->payload_packet_len){
+          NDPI_LOG_INFO(ndpi_struct, "found possible ceph traffic over tcp\n");
+          //ndpi_add_ceph_flow(ndpi_struct, flow);
+          flow->l4.tcp.prev_ceph_seq = h.seq;
+        }
+      }
+
+      // record ceph keepalive meaasge
+      if(tag == CEPH_MSGR_TAG_KEEPALIVE2){
+        flow->l4.tcp.prev_ceph_ka_time = *(u_int64_t *)(packet->payload + tag_offset + 1);
+      }
+
+      // record ceph keepalive meaasge
+      if(tag == CEPH_MSGR_TAG_KEEPALIVE2_ACK){
+        u_int64_t current_ka_time = *(u_int64_t *)(packet->payload + tag_offset + 1);
+        if (current_ka_time == flow->l4.tcp.prev_ceph_ka_time){
           ndpi_add_ceph_flow(ndpi_struct, flow);
         }
-        flow->l4.tcp.prev_ceph_seq = h.seq;
       }
 
       flow->l4.tcp.prev_ceph_tag = tag;
