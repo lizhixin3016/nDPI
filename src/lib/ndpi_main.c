@@ -1874,7 +1874,7 @@ static void ndpi_init_protocol_defaults(struct ndpi_detection_module_struct *ndp
 			    ndpi_build_default_ports(ports_b, 0, 0, 0, 0, 0) /* UDP */);
     ndpi_set_proto_defaults(ndpi_mod, NDPI_PROTOCOL_ACCEPTABLE, NDPI_PROTOCOL_MONGODB,
           no_master,
-          no_master, "MongoDB", NDPI_PROTOCOL_CATEGORY_CLOUD,
+          no_master, "MongoDB", NDPI_PROTOCOL_CATEGORY_DATABASE,
           ndpi_build_default_ports(ports_a, 27017, 0, 0, 0, 0) /* TCP */,
           ndpi_build_default_ports(ports_b, 0, 0, 0, 0, 0) /* UDP */);
 
